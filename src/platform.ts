@@ -307,11 +307,11 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
                       }
                     } else {
                       // the accessory does not yet exist, so we need to create it
-                      this.log.info('Adding new accessory:', accessories.name);
-                      this.log.debug(`Registering new device: ${accessories.name} - ${device.deviceID}`);
+                      this.log.info('Adding new accessory:', `${accessories.name} Thermostat`);
+                      this.log.debug(`Registering new device: ${accessories.name} Thermostat - ${device.deviceID}`);
 
                       // create a new accessory
-                      const accessory = new this.api.platformAccessory(accessories.name, uuid);
+                      const accessory = new this.api.platformAccessory(`${accessories.name} Thermostat`, uuid);
 
                       // store a copy of the device object in the `accessory.context`
                       // the `context` property can be used to store any data about the accessory you may need
