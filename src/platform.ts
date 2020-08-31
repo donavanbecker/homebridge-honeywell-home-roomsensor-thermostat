@@ -268,12 +268,12 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
               })).data;
               for (const roomaccessories of group.rooms) {
                 this.log.debug(`Found ${accessory.rooms.length} accessory.rooms`);
-                this.log.warn(group.rooms);
-                this.log.warn(roomaccessories);
+                this.log.debug(group.rooms);
+                this.log.debug(roomaccessories);
               }
               for (const accessories of accessory.rooms) {
-                this.log.debug(accessory.rooms);
-                this.log.debug(accessories);
+                this.log.warn(accessory.rooms);
+                this.log.warn(accessories);
                 for (const findaccessories of accessories.accessories) {
                   this.log.debug(`Found ${accessories.accessories.length} accessories.accessories`);
                   this.log.debug(accessories.accessories);
