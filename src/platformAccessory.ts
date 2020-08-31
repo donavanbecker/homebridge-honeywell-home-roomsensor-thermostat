@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Service, PlatformAccessory } from 'homebridge';
 
 import { RoomSensorThermostatPlatform } from './platform';
@@ -31,9 +32,11 @@ export class RoomSensorThermostat {
   OccupancyDetected: any;
   CurrentRelativeHumidity: any;
   MotionDetected!: any;
+  roompriority!: any;
   sensor!: any;
 
-
+  roomUpdateInProgress!: boolean;
+  doRoomUpdate!: any;
   thermostatUpdateInProgress!: boolean;
   doThermostatUpdate!: any;
   honeywellMode: any;
@@ -47,6 +50,7 @@ export class RoomSensorThermostat {
     public device: any,
     public findaccessories: any,
     public readonly group: any,
+    public readonly room: any,
   ) {
 
     // Map Honeywell Modes to HomeKit Modes
@@ -75,6 +79,8 @@ export class RoomSensorThermostat {
     this.TemperatureDisplayUnits;
 
     // this is subject we use to track when we need to POST changes to the Honeywell API
+    this.doRoomUpdate = new Subject();
+    this.roomUpdateInProgress = false;
     this.doThermostatUpdate = new Subject();
     this.thermostatUpdateInProgress = false;
     this.doSensorUpdate = new Subject();
@@ -209,6 +215,9 @@ export class RoomSensorThermostat {
     this.refreshStatus();
 
     // Start an update interval
+    interval(this.platform.config.options.ttl * 1000).pipe(skipWhile(() => this.roomUpdateInProgress)).subscribe(() => {
+      this.refreshStatus();
+    });
     interval(this.platform.config.options.ttl * 1000).pipe(skipWhile(() => this.thermostatUpdateInProgress)).subscribe(() => {
       this.refreshStatus();
     });
@@ -217,7 +226,17 @@ export class RoomSensorThermostat {
     });
 
     // Watch for thermostat change events
-    // We put in a debounce of 100ms so we don't make duplicate calls
+    // We put in a debounce of 100ms so we don't make duplicate calls    
+    this.doRoomUpdate.pipe(tap(() => {
+      this.roomUpdateInProgress = true;
+    }), debounceTime(100)).subscribe(async () => {
+      try {
+        await this.pushRoomChanges();
+      } catch (e) {
+        this.platform.log.error(e.message);
+      }
+      this.roomUpdateInProgress = false;
+    });
     this.doThermostatUpdate.pipe(tap(() => {
       this.thermostatUpdateInProgress = true;
     }), debounceTime(100)).subscribe(async () => {
@@ -240,7 +259,6 @@ export class RoomSensorThermostat {
    * Parse the device status from the honeywell api
    */
   parseStatus() {
-
     this.TemperatureDisplayUnits = this.device.units === 'Fahrenheit' ? this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT :
       this.platform.Characteristic.TemperatureDisplayUnits.CELSIUS;
     this.TemperatureDisplayUnits = this.device.units === 'Fahrenheit' ? this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT :
@@ -320,11 +338,18 @@ export class RoomSensorThermostat {
    */
   async refreshStatus() {
     try {
+      const roompriority = (await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
+        params: {
+          locationId: this.locationId,
+        },
+      })).data;
       const sensor = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/group/${this.group.id}/rooms`, {
         params: {
           locationId: this.locationId,
         },
       })).data;
+      this.platform.log.debug(roompriority);
+      this.roompriority = roompriority;
       this.platform.log.debug(sensor);
       this.sensor = sensor;
       this.findaccessories;
@@ -335,6 +360,25 @@ export class RoomSensorThermostat {
     } catch (e) {
       this.platform.log.error(`Failed to update status of ${this.device.name}`, e.message);
     }
+  }
+
+  /**
+   * Pushes the requested changes for Fan to the Honeywell API 
+   */
+  async pushRoomChanges() {
+    const roomPayload = {
+      currentPriority: {
+        priorityType: 'TemporaryHold',
+        selectedRooms: [this.device.room],
+      },
+    } as any;
+    // set the room priority
+    roomPayload.currentPriority.selectedRooms = this.room;
+    
+    this.platform.log.info(`Sending request to Honeywell API. room priority: ${roomPayload.currentPriority.selectedRooms}`);
+
+    // Refresh the status from the API
+    await this.refreshStatus();
   }
 
   /**
@@ -362,7 +406,6 @@ export class RoomSensorThermostat {
       payload.heatSetpoint = this.toFahrenheit(this.HeatingThresholdTemperature);
     }
 
-    // eslint-disable-next-line max-len
     this.platform.log.info(`Sending request to Honeywell API. mode: ${payload.mode}, coolSetpoint: ${payload.coolSetpoint}, heatSetpoint: ${payload.heatSetpoint}`);
     this.platform.log.debug(JSON.stringify(payload));
 
