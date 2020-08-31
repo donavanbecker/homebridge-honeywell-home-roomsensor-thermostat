@@ -42,7 +42,7 @@ export class RoomSensorThermostat {
   honeywellMode: any;
   SensorUpdateInProgress!: boolean;
   doSensorUpdate!: any;
-  
+
   constructor(
     private readonly platform: RoomSensorThermostatPlatform,
     private accessory: PlatformAccessory,
@@ -60,7 +60,7 @@ export class RoomSensorThermostat {
       'Cool': platform.Characteristic.TargetHeatingCoolingState.COOL,
       'Auto': platform.Characteristic.TargetHeatingCoolingState.AUTO,
     };
-    
+
     // Map HomeKit Modes to Honeywell Modes
     // Don't change the order of these!
     this.honeywellMode = ['Off', 'Heat', 'Cool', 'Auto'];
@@ -137,7 +137,7 @@ export class RoomSensorThermostat {
 
     this.service.getCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits)
       .on('set', this.setTemperatureDisplayUnits.bind(this));
-      
+
     this.batteryService = this.accessory.getService(this.platform.Service.BatteryService);
     if (!this.batteryService && !this.platform.config.options.roomsensor.hide_battery) {
       this.batteryService = accessory.addService(this.platform.Service.BatteryService,
@@ -156,7 +156,7 @@ export class RoomSensorThermostat {
     }
 
     // Temperature Sensor  
-    this.temperatureService = accessory.getService(this.platform.Service.TemperatureSensor);  
+    this.temperatureService = accessory.getService(this.platform.Service.TemperatureSensor);
     if (!this.temperatureService && !this.platform.config.options.roomsensor.hide_temperature) {
       this.temperatureService = accessory.addService(this.platform.Service.TemperatureSensor,
         `${this.findaccessories.accessoryAttribute.name} Occupancy Sensor`);
@@ -168,9 +168,9 @@ export class RoomSensorThermostat {
     } else if (this.temperatureService && this.platform.config.options.roomsensor.hide_temperature) {
       accessory.removeService(this.temperatureService);
     }
-      
+
     // Occupancy Sensor  
-    this.occupancyService = accessory.getService(this.platform.Service.OccupancySensor);  
+    this.occupancyService = accessory.getService(this.platform.Service.OccupancySensor);
     if (!this.occupancyService && !this.platform.config.options.roomsensor.hide_occupancy) {
       this.occupancyService = accessory.addService(this.platform.Service.OccupancySensor,
         `${this.findaccessories.accessoryAttribute.name} Occupancy Sensor`);
@@ -196,7 +196,7 @@ export class RoomSensorThermostat {
     } else if (this.humidityService && this.platform.config.options.roomsensor.hide_humidity) {
       accessory.removeService(this.humidityService);
     }
-    
+
     // Motion Sensor
     this.motionService = accessory.getService(this.platform.Service.MotionSensor);
     if (!this.motionService && !this.platform.config.options.roomsensor.hide_motion) {
@@ -338,7 +338,7 @@ export class RoomSensorThermostat {
    */
   async refreshStatus() {
     try {
-      const roompriority = (await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
+      const roompriority = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
         params: {
           locationId: this.locationId,
         },
@@ -374,16 +374,24 @@ export class RoomSensorThermostat {
     } as any;
     // set the room priority
     roomPayload.currentPriority.selectedRooms = this.room;
-    
+
     this.platform.log.info(`Sending request to Honeywell API. room priority: ${roomPayload.currentPriority.selectedRooms}`);
+    this.platform.log.debug(JSON.stringify(roomPayload));
+
+    // Make the API request
+    await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/fan`, roomPayload, {
+      params: {
+        locationId: this.locationId,
+      },
+    });
 
     // Refresh the status from the API
     await this.refreshStatus();
   }
 
   /**
-   * Pushes the requested changes to the Honeywell API
-   */
+ * Pushes the requested changes to the Honeywell API
+ */
   async pushChanges() {
     const payload = {
       mode: this.honeywellMode[this.TargetHeatingCoolingState],
@@ -421,8 +429,8 @@ export class RoomSensorThermostat {
   }
 
   /**
-   * Updates the status for each of the HomeKit Characteristics
-   */
+ * Updates the status for each of the HomeKit Characteristics
+ */
   updateHomeKitCharacteristics() {
     this.service.updateCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits, this.TemperatureDisplayUnits);
     this.service.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, this.CurrentTemperature);
@@ -435,7 +443,7 @@ export class RoomSensorThermostat {
     if (this.platform.config.options.roomsensor.hide_battery) {
       this.batteryService.updateCharacteristic(this.platform.Characteristic.StatusLowBattery, this.StatusLowBattery);
     }
-    if (!this.platform.config.options.roomsensor.hide_temperature){
+    if (!this.platform.config.options.roomsensor.hide_temperature) {
       this.temperatureService.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, this.CurrentTemperature);
     }
     if (!this.platform.config.options.roomsensor.hide_occupancy) {
@@ -500,8 +508,8 @@ export class RoomSensorThermostat {
   }
 
   /**
-   * Handle requests to get the current value of the "Tempeture Sensor" characteristics
-   */
+ * Handle requests to get the current value of the "Tempeture Sensor" characteristics
+ */
   handeStatusLowBatteryGet(callback: (arg0: null, arg1: any) => void) {
     this.platform.log.debug(`Update Battery Status: ${this.StatusLowBattery}`);
 
@@ -523,8 +531,8 @@ export class RoomSensorThermostat {
   }
 
   /**
-   * Handle requests to get the current value of the "Occupancy Sensor" characteristics
-   */
+ * Handle requests to get the current value of the "Occupancy Sensor" characteristics
+ */
   handleOccupancyDetectedGet(callback: (arg0: null, arg1: any) => void) {
     this.platform.log.debug(`Update Occupancy: ${this.OccupancyDetected}`);
 
@@ -536,8 +544,8 @@ export class RoomSensorThermostat {
   }
 
   /**
-   * Handle requests to get the current value of the "Humidity Sensor" characteristics
-   */
+ * Handle requests to get the current value of the "Humidity Sensor" characteristics
+ */
   handleCurrentRelativeHumidityGet(callback: (arg0: null, arg1: any) => void) {
     this.platform.log.debug(`Update Current Relative Humidity: ${this.CurrentRelativeHumidity}`);
 
@@ -549,8 +557,8 @@ export class RoomSensorThermostat {
   }
 
   /**
-   * Handle requests to get the current value of the "Motion Sensor" characteristics
-   */
+ * Handle requests to get the current value of the "Motion Sensor" characteristics
+ */
   handleMotionDetectedGet(callback: (arg0: null, arg1: any) => void) {
     this.platform.log.debug(`Update Motion: ${this.MotionDetected}`);
 
@@ -562,8 +570,8 @@ export class RoomSensorThermostat {
   }
 
   /**
-   * Converts the value to celsius if the temperature units are in Fahrenheit
-   */
+ * Converts the value to celsius if the temperature units are in Fahrenheit
+ */
   toCelsius(value: number) {
     if (this.TemperatureDisplayUnits === this.platform.Characteristic.TemperatureDisplayUnits.CELSIUS) {
       return value;
@@ -574,8 +582,8 @@ export class RoomSensorThermostat {
   }
 
   /**
-   * Converts the value to fahrenheit if the temperature units are in Fahrenheit
-   */
+ * Converts the value to fahrenheit if the temperature units are in Fahrenheit
+ */
   toFahrenheit(value: number) {
     if (this.TemperatureDisplayUnits === this.platform.Characteristic.TemperatureDisplayUnits.CELSIUS) {
       return value;
