@@ -50,7 +50,7 @@ export class RoomSensorThermostat {
     public device: any,
     public findaccessories: any,
     public readonly group: any,
-    public readonly room: any,
+    // public readonly room: any,
   ) {
 
     // Map Honeywell Modes to HomeKit Modes
@@ -373,7 +373,7 @@ export class RoomSensorThermostat {
       },
     } as any;
     // set the room priority
-    roomPayload.currentPriority.selectedRooms = this.room;
+    roomPayload.currentPriority.selectedRooms = this.device.room;
 
     this.platform.log.info(`Sending request to Honeywell API. room priority: ${roomPayload.currentPriority.selectedRooms}`);
     this.platform.log.debug(JSON.stringify(roomPayload));
