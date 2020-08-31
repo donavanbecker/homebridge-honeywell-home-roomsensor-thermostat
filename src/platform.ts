@@ -93,10 +93,15 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
     if (!this.config.options || typeof this.config.options !== 'object') {
       this.config.options = {};
     }
-    this.config.options.hide_temperature;
-    this.config.options.hide_occupancy;
-    this.config.options.hide_motion;
-    this.config.options.hide_humidity;
+    if (!this.config.options.roomsensor || typeof this.config.options.roomsensor !== 'object') {
+      this.config.options.roomsensor = {};
+    }
+    // Room Sensor Config Options
+    this.config.options.roomsensor.hide_battery;
+    this.config.options.roomsensor.hide_temperature;
+    this.config.options.roomsensor.hide_occupancy;
+    this.config.options.roomsensor.hide_motion;
+    this.config.options.roomsensor.hide_humidity;
 
     this.config.options.ttl = this.config.options.ttl || 1800; // default 1800 seconds
     this.config.options.debug = this.config.options.debug || false; // default false
