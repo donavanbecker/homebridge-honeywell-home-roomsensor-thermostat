@@ -422,7 +422,7 @@ export class RoomSensorThermostat {
     this.platform.log.debug(JSON.stringify(payload));
 
     // Make the API request
-    await this.doRoomUpdate.next();
+    await this.pushRoomChanges;
     await this.platform.axios.post(`${DeviceURL}/thermostats/${this.device.deviceID}`, payload, {
       params: {
         locationId: this.locationId,
