@@ -25,6 +25,9 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
   });
 
   rooms: any;
+  location: any;
+  device: any;
+  roompriority: any;
 
   constructor(
     public readonly log: Logger,
@@ -283,6 +286,8 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
                   this.log.debug(findaccessories);
                   this.log.debug(findaccessories.accessoryAttribute.type);
 
+                  this.deviceIdRoomSensor();
+                  this.log.warn(this.roompriority.deviceId);
                   // generate a unique id for the accessory this should be generated from
                   // something globally unique, but constant, for example, the device serial
                   // number or MAC address
@@ -351,4 +356,23 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
       }
     }
   }
+  
+  /**
+   * Asks the Honeywell Home API for the latest device information
+   */
+  async deviceIdRoomSensor() {
+    try {
+      const roompriority = (await this.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
+        params: {
+          locationId: this.location.locationId,
+        },
+      })).data;
+      this.log.warn(roompriority);
+      this.log.warn(roompriority.deviceId);
+    } catch (e) {
+      this.log.error(`Failed to update status of ${this.device.name}`, e.message);
+    }
+  }
+
 }
+
