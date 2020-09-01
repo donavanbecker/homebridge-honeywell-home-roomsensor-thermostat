@@ -341,13 +341,20 @@ export class RoomSensorThermostat {
    */
   async refreshStatus() {
     try {
+      const roompriority = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
+        params: {
+          locationId: this.locationId,
+        },
+      })).data;
       const sensor = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/group/${this.group.id}/rooms`, {
         params: {
           locationId: this.locationId,
         },
       })).data;
-      this.platform.log.debug(sensor);
+      this.roompriority = roompriority;
+      this.platform.log.debug(roompriority);
       this.sensor = sensor;
+      this.platform.log.debug(sensor);
       this.findaccessories;
       this.platform.log.debug(this.findaccessories);
       this.platform.log.debug(JSON.stringify(this.findaccessories.accessoryValue));
