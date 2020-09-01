@@ -66,7 +66,7 @@ export class RoomSensorThermostat {
     // Map HomeKit Modes to Honeywell Modes
     // Don't change the order of these!
     this.honeywellMode = ['Off', 'Heat', 'Cool', 'Auto'];
-    this.honeywellRooms = [this.rooms];
+    this.honeywellRooms = [`${this.roompriority}`, `${this.platform.rooms}`];
 
     // default placeholders
     this.CurrentTemperature;
@@ -352,7 +352,7 @@ export class RoomSensorThermostat {
         },
       })).data;
       this.roompriority = roompriority;
-      this.platform.log.debug(roompriority);
+      this.platform.log.warn(roompriority);
       this.sensor = sensor;
       this.platform.log.debug(sensor);
       this.findaccessories;
