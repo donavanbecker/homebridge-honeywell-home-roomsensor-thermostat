@@ -465,6 +465,7 @@ export class RoomSensorThermostat {
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
 
+    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
@@ -521,7 +522,6 @@ export class RoomSensorThermostat {
     // set this to a valid value for CurrentTemperature
     const currentValue = this.CurrentTemperature;
 
-    this.doRoomUpdate.next();
     this.doSensorUpdate.next();
     callback(null, currentValue);
   }
