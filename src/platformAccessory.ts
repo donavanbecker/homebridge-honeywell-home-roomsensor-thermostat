@@ -397,6 +397,7 @@ export class RoomSensorThermostat {
  * Pushes the requested changes to the Honeywell API
  */
   async pushChanges() {
+    await this.pushRoomChanges();
     const payload = {
       mode: this.honeywellMode[this.TargetHeatingCoolingState],
       thermostatSetpointStatus: 'TemporaryHold',
@@ -422,7 +423,6 @@ export class RoomSensorThermostat {
     this.platform.log.warn(JSON.stringify(payload));
 
     // Make the API request
-    // this.pushRoomChanges;
     await this.platform.axios.post(`${DeviceURL}/thermostats/${this.device.deviceID}`, payload, {
       params: {
         locationId: this.locationId,
