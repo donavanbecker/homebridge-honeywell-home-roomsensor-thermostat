@@ -244,7 +244,7 @@ export class RoomSensorThermostat {
       this.thermostatUpdateInProgress = true;
     }), debounceTime(100)).subscribe(async () => {
       try {
-        await this.pushRoomChanges();
+        // await this.pushRoomChanges();
         await this.pushChanges();
       } catch (e) {
         this.platform.log.error(e.message);
