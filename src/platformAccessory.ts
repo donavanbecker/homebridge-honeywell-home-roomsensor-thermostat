@@ -444,7 +444,7 @@ export class RoomSensorThermostat {
     this.service.updateCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature, this.CoolingThresholdTemperature);
     this.service.updateCharacteristic(this.platform.Characteristic.TargetHeatingCoolingState, this.TargetHeatingCoolingState);
     this.service.updateCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState, this.CurrentHeatingCoolingState);
-    if (this.platform.config.options.roomsensor.hide_battery) {
+    if (!this.platform.config.options.roomsensor.hide_battery) {
       this.batteryService.updateCharacteristic(this.platform.Characteristic.StatusLowBattery, this.StatusLowBattery);
     }
     if (!this.platform.config.options.roomsensor.hide_temperature) {
