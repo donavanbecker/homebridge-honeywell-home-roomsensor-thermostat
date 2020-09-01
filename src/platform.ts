@@ -308,7 +308,7 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
 
                         // create the accessory handler for the restored accessory
                         // this is imported from `platformAccessory.ts`
-                        new RoomSensorThermostat(this, existingAccessory, locationId, device, findaccessories, group, accessories, this.rooms);
+                        new RoomSensorThermostat(this, existingAccessory, locationId, device, findaccessories, group, this.rooms);
                       } else if (!device.isAlive) {
                         // remove platform accessories when no longer present
                         this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
@@ -329,7 +329,7 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
 
                       // create the accessory handler for the newly create accessory
                       // this is imported from `platformAccessory.ts`
-                      new RoomSensorThermostat(this, accessory, locationId, device, findaccessories, group, accessories, this.rooms);
+                      new RoomSensorThermostat(this, accessory, locationId, device, findaccessories, group, this.rooms);
 
                       // link the accessory to your platform
                       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);

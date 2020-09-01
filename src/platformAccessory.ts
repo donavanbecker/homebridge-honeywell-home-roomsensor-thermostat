@@ -50,7 +50,6 @@ export class RoomSensorThermostat {
     public device: any,
     public findaccessories: any,
     public readonly group: any,
-    public readonly accessories: any,
     public readonly rooms: any,
     // public readonly room: any,
   ) {
@@ -364,15 +363,15 @@ export class RoomSensorThermostat {
     const roomPayload = {
       currentPriority: {
         priorityType: 'TemporaryHold',
-        selectedRooms: [this.accessories.id],
+        selectedRooms: [this.platform.rooms],
       },
     } as any;
     // set the room priority
     this.platform.log.warn(this.platform.rooms);
-    roomPayload.currentPriority.selectedRooms = this.accessories.id;
+    roomPayload.currentPriority.selectedRooms = this.platform.rooms;
 
     this.platform.log.info(`Sending request to Honeywell API. room priority: ${roomPayload.currentPriority.selectedRooms}`);
-    this.platform.log.warn(JSON.stringify(roomPayload));
+    this.platform.log.debug(JSON.stringify(roomPayload));
 
     // Make the API request
     await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/fan`, roomPayload, {
