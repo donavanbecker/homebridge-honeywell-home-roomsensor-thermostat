@@ -268,7 +268,7 @@ export class RoomSensorThermostat {
       this.platform.Characteristic.TemperatureDisplayUnits.CELSIUS;
 
     this.CurrentTemperature = this.toCelsius(this.findaccessories.accessoryValue.indoorTemperature);
-    this.CurrentRelativeHumidity = this.device.indoorHumidity;
+    this.CurrentRelativeHumidity = this.findaccessories.accessoryValue.indoorHumidity;
 
     if (this.device.changeableValues.heatSetpoint > 0) {
       this.HeatingThresholdTemperature = this.toCelsius(this.device.changeableValues.heatSetpoint);
