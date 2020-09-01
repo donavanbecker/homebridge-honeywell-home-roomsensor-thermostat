@@ -244,7 +244,7 @@ export class RoomSensorThermostat {
       this.thermostatUpdateInProgress = true;
     }), debounceTime(100)).subscribe(async () => {
       try {
-        await this.pushRoomChanges();
+        // await this.pushRoomChanges();
         await this.pushChanges();
       } catch (e) {
         this.platform.log.error(e.message);
@@ -422,7 +422,7 @@ export class RoomSensorThermostat {
     this.platform.log.warn(JSON.stringify(payload));
 
     // Make the API request
-    await this.pushRoomChanges;
+    // this.pushRoomChanges;
     await this.platform.axios.post(`${DeviceURL}/thermostats/${this.device.deviceID}`, payload, {
       params: {
         locationId: this.locationId,
