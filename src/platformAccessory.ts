@@ -40,6 +40,7 @@ export class RoomSensorThermostat {
   thermostatUpdateInProgress!: boolean;
   doThermostatUpdate!: any;
   honeywellMode: any;
+  honeywellRooms: any;
   SensorUpdateInProgress!: boolean;
   doSensorUpdate!: any;
 
@@ -65,6 +66,7 @@ export class RoomSensorThermostat {
     // Map HomeKit Modes to Honeywell Modes
     // Don't change the order of these!
     this.honeywellMode = ['Off', 'Heat', 'Cool', 'Auto'];
+    this.honeywellRooms = [this.rooms];
 
     // default placeholders
     this.CurrentTemperature;
@@ -363,7 +365,7 @@ export class RoomSensorThermostat {
     const roomPayload = {
       currentPriority: {
         priorityType: 'TemporaryHold',
-        selectedRooms: [this.platform.rooms],
+        selectedRooms: this.honeywellRooms[this.platform.rooms],
       },
     } as any;
     // set the room priority
