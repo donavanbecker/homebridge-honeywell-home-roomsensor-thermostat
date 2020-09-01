@@ -353,6 +353,8 @@ export class RoomSensorThermostat {
       })).data;
       this.roompriority = roompriority;
       this.platform.log.warn(roompriority);
+      this.platform.log.warn(roompriority.currentPriority);
+      this.platform.log.warn(roompriority.currentPriority.rooms);
       this.sensor = sensor;
       this.platform.log.debug(sensor);
       this.findaccessories;
