@@ -342,7 +342,7 @@ export class RoomSensorThermostat {
    */
   async refreshStatus() {
     try {
-      const rooms = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
+      const roompriority = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
         params: {
           locationId: this.locationId,
         },
@@ -352,7 +352,7 @@ export class RoomSensorThermostat {
           locationId: this.locationId,
         },
       })).data;
-      this.roompriority = rooms;
+      this.roompriority = roompriority;
       this.sensor = sensor;
       this.platform.log.debug(sensor);
       this.findaccessories;
@@ -379,7 +379,8 @@ export class RoomSensorThermostat {
     this.platform.log.debug(this.platform.rooms);
     payload.currentPriority.selectedRooms = this.platform.rooms;
 
-    this.platform.log.info(`Sending request to Honeywell API. room priority: ${payload.currentPriority.selectedRooms}`);
+    this.platform.log.warn(this.group);
+    this.platform.log.info(`Sending request to Honeywell API. room priority: ${this.roompriority.rooms.roomName}(${payload.currentPriority.selectedRooms})`);
     this.platform.log.warn(JSON.stringify(payload));
 
     // Make the API request
