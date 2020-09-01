@@ -372,7 +372,7 @@ export class RoomSensorThermostat {
     const payload = {
       currentPriority: {
         priorityType: 'PickARoom',
-        selectedRooms: this.honeywellRooms[this.platform.rooms],
+        selectedRooms: this.platform.rooms,
       },
     } as any;
     // set the room priority
@@ -419,7 +419,7 @@ export class RoomSensorThermostat {
     }
 
     this.platform.log.info(`Sending request to Honeywell API. mode: ${payload.mode}, coolSetpoint: ${payload.coolSetpoint}, heatSetpoint: ${payload.heatSetpoint}`);
-    this.platform.log.debug(JSON.stringify(payload));
+    this.platform.log.warn(JSON.stringify(payload));
 
     // Make the API request
     await this.pushRoomChanges;
