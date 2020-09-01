@@ -383,7 +383,6 @@ export class RoomSensorThermostat {
     roomPayload.currentPriority.selectedRooms = this.platform.rooms;
 
     this.platform.log.info(`Sending request to Honeywell API. room priority: ${roomPayload.currentPriority.selectedRooms}`);
-    this.platform.log.warn(roomPayload);
     this.platform.log.warn(JSON.stringify(roomPayload));
 
     // Make the API request
@@ -427,6 +426,7 @@ export class RoomSensorThermostat {
 
     // Make the API request
     await this.doRoomUpdate.next();
+    await this.pushRoomChanges();
     await this.platform.axios.post(`${DeviceURL}/thermostats/${this.device.deviceID}`, payload, {
       params: {
         locationId: this.locationId,
