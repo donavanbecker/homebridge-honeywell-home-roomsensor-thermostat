@@ -365,7 +365,7 @@ export class RoomSensorThermostat {
     const roomPayload = {
       currentPriority: {
         priorityType: 'TemporaryHold',
-        selectedRooms: this.honeywellRooms[this.platform.rooms],
+        selectedRooms: this.honeywellRooms[`[${this.platform.rooms}]`],
       },
     } as any;
     // set the room priority
