@@ -452,7 +452,7 @@ export class RoomSensorThermostat {
     }
   }
 
-  setTargetHeatingCoolingState(value: any, callback: (arg0: null) => void) {
+  async setTargetHeatingCoolingState(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set TargetHeatingCoolingState: ${value}`);
 
     this.TargetHeatingCoolingState = value;
@@ -464,7 +464,7 @@ export class RoomSensorThermostat {
       this.TargetTemperature = this.toCelsius(this.device.changeableValues.coolSetpoint);
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
-
+    await this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
