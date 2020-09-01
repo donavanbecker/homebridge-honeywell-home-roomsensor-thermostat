@@ -367,7 +367,7 @@ export class RoomSensorThermostat {
       },
     } as any;
     // set the room priority
-    this.platform.log.warn(this.platform.rooms);
+    this.platform.log.debug(this.platform.rooms);
     roomPayload.currentPriority.selectedRooms = this.platform.rooms;
 
     this.platform.log.info(`Sending request to Honeywell API. room priority: ${roomPayload.currentPriority.selectedRooms}`);
@@ -465,7 +465,6 @@ export class RoomSensorThermostat {
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
 
-    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
@@ -487,6 +486,7 @@ export class RoomSensorThermostat {
   setTargetTemperature(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set TargetTemperature:': ${value}`);
     this.TargetTemperature = value;
+    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
