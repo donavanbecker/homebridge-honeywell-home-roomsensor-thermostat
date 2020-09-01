@@ -465,7 +465,6 @@ export class RoomSensorThermostat {
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
 
-    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
@@ -473,7 +472,6 @@ export class RoomSensorThermostat {
   setHeatingThresholdTemperature(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set HeatingThresholdTemperature: ${value}`);
     this.HeatingThresholdTemperature = value;
-    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
@@ -481,7 +479,6 @@ export class RoomSensorThermostat {
   setCoolingThresholdTemperature(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set CoolingThresholdTemperature: ${value}`);
     this.CoolingThresholdTemperature = value;
-    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
@@ -489,7 +486,6 @@ export class RoomSensorThermostat {
   setTargetTemperature(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set TargetTemperature:': ${value}`);
     this.TargetTemperature = value;
-    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
@@ -525,6 +521,7 @@ export class RoomSensorThermostat {
     // set this to a valid value for CurrentTemperature
     const currentValue = this.CurrentTemperature;
 
+    this.doRoomUpdate.next();
     this.doSensorUpdate.next();
     callback(null, currentValue);
   }
@@ -551,6 +548,7 @@ export class RoomSensorThermostat {
     // set this to a valid value for CurrentRelativeHumidity
     const currentValue = this.CurrentRelativeHumidity;
 
+    this.doRoomUpdate.next();
     this.doSensorUpdate.next();
     callback(null, currentValue);
   }

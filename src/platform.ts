@@ -260,7 +260,7 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
             for (const rooms of group.rooms) {
               this.log.debug(`Found Room ${rooms}`);
               this.log.debug(group.rooms);
-              this.log.warn(rooms);
+              this.log.debug(rooms);
               this.rooms = rooms;
             }
             {
@@ -275,12 +275,12 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
                 this.log.debug(roomaccessories);
               }
               for (const accessories of accessory.rooms) {
-                this.log.warn(accessory.rooms);
-                this.log.warn(accessories);
+                this.log.debug(accessory.rooms);
+                this.log.debug(accessories);
                 for (const findaccessories of accessories.accessories) {
                   this.log.debug(`Found ${accessories.accessories.length} accessories.accessories`);
-                  this.log.warn(accessories.accessories);
-                  this.log.warn(findaccessories);
+                  this.log.debug(accessories.accessories);
+                  this.log.debug(findaccessories);
                   this.log.debug(findaccessories.accessoryAttribute.type);
 
                   // generate a unique id for the accessory this should be generated from
