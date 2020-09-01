@@ -244,7 +244,6 @@ export class RoomSensorThermostat {
       this.thermostatUpdateInProgress = true;
     }), debounceTime(100)).subscribe(async () => {
       try {
-        // await this.pushRoomChanges();
         await this.pushChanges();
       } catch (e) {
         this.platform.log.error(e.message);
@@ -352,11 +351,10 @@ export class RoomSensorThermostat {
           locationId: this.locationId,
         },
       })).data;
-      this.platform.log.warn(roompriority);
-      this.platform.log.warn(this.roompriority.deviceId);
+      this.platform.log.debug(roompriority);
       this.roompriority = roompriority;
-      this.sensor = sensor;
       this.platform.log.debug(sensor);
+      this.sensor = sensor;
       this.findaccessories;
       this.platform.log.debug(this.findaccessories);
       this.platform.log.debug(JSON.stringify(this.findaccessories.accessoryValue));
@@ -463,17 +461,17 @@ export class RoomSensorThermostat {
     }
   }
 
-  /* setRoomPriority(value: any, callback: (arg0: null) => void) {
+  setRoomPriority(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set Room Priority: ${value}`);
 
     this.platform.rooms = value;
     this.doRoomUpdate.next();
     callback(null);
-  }*/
+  }
 
   setTargetHeatingCoolingState(value: any, callback: (arg0: null) => void) {
+    this.setRoomPriority;
     this.platform.log.debug(`Set TargetHeatingCoolingState: ${value}`);
-
     this.TargetHeatingCoolingState = value;
 
     // Set the TargetTemperature value based on the selected mode
@@ -483,7 +481,6 @@ export class RoomSensorThermostat {
       this.TargetTemperature = this.toCelsius(this.device.changeableValues.coolSetpoint);
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
-    // this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
