@@ -132,11 +132,6 @@
           "items": [
             {
               "type": "help",
-              "helpvalue": "<h5>Thermostat</h5><em class='primary-text'>Allows you to hide your Thermostat(s).</em>"
-            },
-            "options.thermostat.hide",
-            {
-              "type": "help",
               "helpvalue": "<h5>Hide Thermostat Fan Service</h5><em class='primary-text'>Allows you to hide your Thermostat's Fan.</em>"
             },
             "options.thermostat.hide_fan"
@@ -170,13 +165,9 @@
           "items": [
             {
               "type": "help",
-              "helpvalue": "<h5>Room Sensors</h5><em class='primary-text'>Allows you to hide your Room Sensor(s).</em>"
-            },
-            "options.roomsensor.hide",
-            {
-              "type": "help",
               "helpvalue": "<h5>Hide Room Sensor Services</h5><em class='primary-text'>Allows you to hide your Room Sensor's tempeture sensor, occupancy sensor, motion sensor, or humidity sensor.</em>"
             },
+            "options.roomsensor.hide_battery",
             "options.roomsensor.hide_temperature",
             "options.roomsensor.hide_occupancy",
             "options.roomsensor.hide_motion",
