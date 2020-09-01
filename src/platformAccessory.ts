@@ -244,6 +244,7 @@ export class RoomSensorThermostat {
       this.thermostatUpdateInProgress = true;
     }), debounceTime(100)).subscribe(async () => {
       try {
+        await this.pushRoomChanges();
         await this.pushChanges();
       } catch (e) {
         this.platform.log.error(e.message);
@@ -352,10 +353,6 @@ export class RoomSensorThermostat {
         },
       })).data;
       this.roompriority = rooms;
-      this.platform.log.warn(rooms);
-      this.platform.log.warn(rooms.currentPriority);
-      this.platform.log.warn(rooms.currentPriority.rooms);
-      this.platform.log.warn(rooms.currentPriority.rooms.id);
       this.sensor = sensor;
       this.platform.log.debug(sensor);
       this.findaccessories;
@@ -426,7 +423,6 @@ export class RoomSensorThermostat {
 
     // Make the API request
     await this.doRoomUpdate.next();
-    await this.pushRoomChanges();
     await this.platform.axios.post(`${DeviceURL}/thermostats/${this.device.deviceID}`, payload, {
       params: {
         locationId: this.locationId,
