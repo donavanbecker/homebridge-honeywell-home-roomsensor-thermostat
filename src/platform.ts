@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 import { interval } from 'rxjs';
 import axios, { AxiosInstance } from 'axios';
@@ -22,6 +23,8 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
   public axios: AxiosInstance = axios.create({
     responseType: 'json',
   });
+
+  rooms: any;
 
   constructor(
     public readonly log: Logger,
@@ -258,6 +261,7 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
               this.log.debug(`Found Room ${rooms}`);
               this.log.debug(group.rooms);
               this.log.warn(rooms);
+              this.rooms = rooms;
             }
             {
               const accessory = (await this.axios.get(`${DeviceURL}/thermostats/${device.deviceID}/group/${group.id}/rooms`, {
@@ -275,8 +279,8 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
                 this.log.warn(accessories);
                 for (const findaccessories of accessories.accessories) {
                   this.log.debug(`Found ${accessories.accessories.length} accessories.accessories`);
-                  this.log.debug(accessories.accessories);
-                  this.log.debug(findaccessories);
+                  this.log.warn(accessories.accessories);
+                  this.log.warn(findaccessories);
                   this.log.debug(findaccessories.accessoryAttribute.type);
 
                   // generate a unique id for the accessory this should be generated from
@@ -304,7 +308,7 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
 
                         // create the accessory handler for the restored accessory
                         // this is imported from `platformAccessory.ts`
-                        new RoomSensorThermostat(this, existingAccessory, locationId, device, findaccessories, group);
+                        new RoomSensorThermostat(this, existingAccessory, locationId, device, findaccessories, group, accessories, this.rooms);
                       } else if (!device.isAlive) {
                         // remove platform accessories when no longer present
                         this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
@@ -325,7 +329,7 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
 
                       // create the accessory handler for the newly create accessory
                       // this is imported from `platformAccessory.ts`
-                      new RoomSensorThermostat(this, accessory, locationId, device, findaccessories, group);
+                      new RoomSensorThermostat(this, accessory, locationId, device, findaccessories, group, accessories, this.rooms);
 
                       // link the accessory to your platform
                       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);

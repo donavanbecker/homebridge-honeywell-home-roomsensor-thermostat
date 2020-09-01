@@ -4,7 +4,7 @@ import { Service, PlatformAccessory } from 'homebridge';
 import { RoomSensorThermostatPlatform } from './platform';
 import { interval, Subject } from 'rxjs';
 import { debounceTime, skipWhile, tap } from 'rxjs/operators';
-import { DeviceURL, LocationURL } from './settings';
+import { DeviceURL } from './settings';
 
 /**
  * Platform Accessory
@@ -42,7 +42,6 @@ export class RoomSensorThermostat {
   honeywellMode: any;
   SensorUpdateInProgress!: boolean;
   doSensorUpdate!: any;
-  room: any;
 
   constructor(
     private readonly platform: RoomSensorThermostatPlatform,
@@ -51,6 +50,8 @@ export class RoomSensorThermostat {
     public device: any,
     public findaccessories: any,
     public readonly group: any,
+    public readonly accessories: any,
+    public readonly rooms: any,
     // public readonly room: any,
   ) {
 
@@ -339,16 +340,6 @@ export class RoomSensorThermostat {
    */
   async refreshStatus() {
     try {
-      const locations = (await this.platform.axios.get(LocationURL)).data;
-      for (const location of locations) {
-        for (const device of location.devices) {
-          for (const group of device.groups) {
-            for (const rooms of group.rooms) {
-              this.room = rooms;
-            }
-          }
-        }
-      }
       const sensor = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/group/${this.group.id}/rooms`, {
         params: {
           locationId: this.locationId,
@@ -373,14 +364,15 @@ export class RoomSensorThermostat {
     const roomPayload = {
       currentPriority: {
         priorityType: 'TemporaryHold',
-        selectedRooms: [this.room],
+        selectedRooms: [this.accessories.id],
       },
     } as any;
     // set the room priority
-    roomPayload.currentPriority.selectedRooms = this.device.room;
+    this.platform.log.warn(this.platform.rooms);
+    roomPayload.currentPriority.selectedRooms = this.accessories.id;
 
     this.platform.log.info(`Sending request to Honeywell API. room priority: ${roomPayload.currentPriority.selectedRooms}`);
-    this.platform.log.debug(JSON.stringify(roomPayload));
+    this.platform.log.warn(JSON.stringify(roomPayload));
 
     // Make the API request
     await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/fan`, roomPayload, {
