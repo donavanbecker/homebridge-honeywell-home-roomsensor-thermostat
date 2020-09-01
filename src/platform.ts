@@ -258,7 +258,6 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
               this.log.debug(`Found Room ${rooms}`);
               this.log.debug(group.rooms);
               this.log.warn(rooms);
-              //const room = rooms;
             }
             {
               const accessory = (await this.axios.get(`${DeviceURL}/thermostats/${device.deviceID}/group/${group.id}/rooms`, {

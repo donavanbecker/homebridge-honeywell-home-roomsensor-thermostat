@@ -4,7 +4,7 @@ import { Service, PlatformAccessory } from 'homebridge';
 import { RoomSensorThermostatPlatform } from './platform';
 import { interval, Subject } from 'rxjs';
 import { debounceTime, skipWhile, tap } from 'rxjs/operators';
-import { DeviceURL } from './settings';
+import { DeviceURL, LocationURL } from './settings';
 
 /**
  * Platform Accessory
@@ -42,6 +42,7 @@ export class RoomSensorThermostat {
   honeywellMode: any;
   SensorUpdateInProgress!: boolean;
   doSensorUpdate!: any;
+  room: any;
 
   constructor(
     private readonly platform: RoomSensorThermostatPlatform,
@@ -338,19 +339,21 @@ export class RoomSensorThermostat {
    */
   async refreshStatus() {
     try {
-      const roompriority = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, {
-        params: {
-          locationId: this.locationId,
-        },
-      })).data;
+      const locations = (await this.platform.axios.get(LocationURL)).data;
+      for (const location of locations) {
+        for (const device of location.devices) {
+          for (const group of device.groups) {
+            for (const rooms of group.rooms) {
+              this.room = rooms;
+            }
+          }
+        }
+      }
       const sensor = (await this.platform.axios.get(`${DeviceURL}/thermostats/${this.device.deviceID}/group/${this.group.id}/rooms`, {
         params: {
           locationId: this.locationId,
         },
       })).data;
-      this.platform.log.debug(roompriority);
-      this.platform.log.warn(roompriority.currentPriority.rooms);
-      this.roompriority = roompriority;
       this.platform.log.debug(sensor);
       this.sensor = sensor;
       this.findaccessories;
@@ -370,7 +373,7 @@ export class RoomSensorThermostat {
     const roomPayload = {
       currentPriority: {
         priorityType: 'TemporaryHold',
-        selectedRooms: [this.device.room],
+        selectedRooms: [this.room],
       },
     } as any;
     // set the room priority
