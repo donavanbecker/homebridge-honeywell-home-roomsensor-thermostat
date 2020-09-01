@@ -374,7 +374,7 @@ export class RoomSensorThermostat {
     this.platform.log.debug(JSON.stringify(roomPayload));
 
     // Make the API request
-    await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/fan`, roomPayload, {
+    await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, roomPayload, {
       params: {
         locationId: this.locationId,
       },
@@ -413,6 +413,7 @@ export class RoomSensorThermostat {
     this.platform.log.debug(JSON.stringify(payload));
 
     // Make the API request
+    await this.doRoomUpdate.next();
     await this.platform.axios.post(`${DeviceURL}/thermostats/${this.device.deviceID}`, payload, {
       params: {
         locationId: this.locationId,
@@ -452,7 +453,15 @@ export class RoomSensorThermostat {
     }
   }
 
-  async setTargetHeatingCoolingState(value: any, callback: (arg0: null) => void) {
+  /* setRoomPriority(value: any, callback: (arg0: null) => void) {
+    this.platform.log.debug(`Set Room Priority: ${value}`);
+
+    this.platform.rooms = value;
+    this.doRoomUpdate.next();
+    callback(null);
+  }*/
+
+  setTargetHeatingCoolingState(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set TargetHeatingCoolingState: ${value}`);
 
     this.TargetHeatingCoolingState = value;
@@ -464,7 +473,8 @@ export class RoomSensorThermostat {
       this.TargetTemperature = this.toCelsius(this.device.changeableValues.coolSetpoint);
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
-    await this.doRoomUpdate.next();
+    // await this.setRoomPriority;
+    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
@@ -486,7 +496,6 @@ export class RoomSensorThermostat {
   setTargetTemperature(value: any, callback: (arg0: null) => void) {
     this.platform.log.debug(`Set TargetTemperature:': ${value}`);
     this.TargetTemperature = value;
-    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
