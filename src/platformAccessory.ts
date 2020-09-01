@@ -244,7 +244,7 @@ export class RoomSensorThermostat {
       this.thermostatUpdateInProgress = true;
     }), debounceTime(100)).subscribe(async () => {
       try {
-        // await this.pushRoomChanges();
+        await this.pushRoomChanges();
         await this.pushChanges();
       } catch (e) {
         this.platform.log.error(e.message);
@@ -397,7 +397,7 @@ export class RoomSensorThermostat {
  * Pushes the requested changes to the Honeywell API
  */
   async pushChanges() {
-    await this.pushRoomChanges();
+    this.doRoomUpdate.next();
     const payload = {
       mode: this.honeywellMode[this.TargetHeatingCoolingState],
       thermostatSetpointStatus: 'TemporaryHold',
@@ -482,7 +482,6 @@ export class RoomSensorThermostat {
       this.TargetTemperature = this.toCelsius(this.device.changeableValues.coolSetpoint);
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
-    // await this.setRoomPriority;
     // this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
