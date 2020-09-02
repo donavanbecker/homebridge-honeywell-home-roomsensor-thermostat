@@ -369,32 +369,31 @@ export class RoomSensorThermostat {
    * Pushes the requested changes for Fan to the Honeywell API 
    */
   async pushRoomChanges() {
-    let payload = {
+    const payload = {
       currentPriority: {
         priorityType: 'PickARoom',
-        selectedRooms: [this.platform.rooms],
+        selectedRooms: [this.rooms],
       },
     };
 
-    if (this.platform.rooms) {
+    this.platform.log.warn(`RoomOn:' ${this.rooms}`);
+
+    /* if (this.RoomOn === !this.platform.Characteristic.On) {
       payload = {
         currentPriority: {
           priorityType: 'PickARoom',
           selectedRooms: [0],
         },
       };
-    } else if (!this.platform.rooms) {
+    } else if (this.RoomOn === this.platform.Characteristic.On) {
       payload = {
         currentPriority: {
           priorityType: 'PickARoom',
-          selectedRooms: [this.platform.rooms],
+          selectedRooms: [this.room],
         },
       };
-    }
-    // set the room priority
-    this.platform.log.debug(this.platform.rooms);
-    payload.currentPriority.selectedRooms = this.platform.rooms;
-    this.platform.log.info(`Sending request to Honeywell API. Room Priority: ${this.findaccessories.accessoryAttribute.name}(${payload.currentPriority.selectedRooms})`);
+    }*/
+    this.platform.log.info(`Sending request to Honeywell API. Room Priority: ${payload.currentPriority.selectedRooms}`);
     this.platform.log.warn(JSON.stringify(payload));
 
     // Make the API request
