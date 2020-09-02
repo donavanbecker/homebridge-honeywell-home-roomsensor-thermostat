@@ -47,17 +47,6 @@
             "minimum": 600,
             "description": "Indicates the number of seconds between polls of the Honeywell Home service."
           },
-          "thermostat": {
-            "title": "Thermostat",
-            "type": "object",
-            "properties": {
-              "hide": {
-                "title": "Hide Thermostat Device(s)",
-                "type": "boolean",
-                "requried": false
-              }
-            }
-          },
           "roomsensor": {
             "title": "Room Sensor",
             "type": "object",
@@ -124,39 +113,6 @@
           "key": "options.ttl",
           "notitle": true
         },
-        {
-          "type": "fieldset",
-          "title": "Thermostat Options",
-          "expandable": true,
-          "expanded": false,
-          "items": [
-            {
-              "type": "help",
-              "helpvalue": "<h5>Hide Thermostat Fan Service</h5><em class='primary-text'>Allows you to hide your Thermostat's Fan.</em>"
-            },
-            "options.thermostat.hide_fan"
-          ]
-        },
-        {
-          "type": "fieldset",
-          "title": "Leak Sensor Options",
-          "expandable": true,
-          "expanded": false,
-          "items": [
-            {
-              "type": "help",
-              "helpvalue": "<h5>Leak Sensors</h5><em class='primary-text'>Allows you to hide your Leak Sensor(s).</em>"
-            },
-            "options.leaksensor.hide",
-            {
-              "type": "help",
-              "helpvalue": "<h5>Hide Leak Sensor Services</h5><em class='primary-text'>Allows you to hide your Leak Sensor's tempeture sensor, leak sensor, or humidity sensor.</em>"
-            },
-            "options.leaksensor.hide_temperature",
-            "options.leaksensor.hide_leak",
-            "options.leaksensor.hide_humidity"
-          ]
-        },   
         {
           "type": "fieldset",
           "title": "Room Sensor Options",

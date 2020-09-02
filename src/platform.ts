@@ -6,7 +6,7 @@ import * as qs from 'querystring';
 import { readFileSync, writeFileSync } from 'fs';
 
 import { PLATFORM_NAME, PLUGIN_NAME, AuthURL, LocationURL, DeviceURL, UIurl } from './settings';
-import { RoomSensorThermostat } from './platformAccessory';
+import { RoomSensorThermostat } from './roomSensorThermostat';
 
 /**
  * HomebridgePlatform
