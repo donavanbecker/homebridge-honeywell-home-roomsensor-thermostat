@@ -100,7 +100,7 @@ export class RoomSensorThermostat {
     // you can create multiple services for each accessory
     this.service = this.accessory.getService(this.platform.Service.Thermostat) ||
       this.accessory.addService(this.platform.Service.Thermostat),
-    `${this.findaccessories.accessoryAttribute.name} Room Sensor Thermostat`;
+      `${this.findaccessories.accessoryAttribute.name} Room Sensor Thermostat`;
 
     // To avoid "Cannot add a Service with the same UUID another Service without also defining a unique 'subtype' property." error,
     // when creating multiple services of the same type, you need to use the following syntax to specify a name and subtype id:
@@ -374,20 +374,36 @@ export class RoomSensorThermostat {
         priorityType: 'PickARoom',
         selectedRooms: [this.platform.rooms],
       },
-    } as any;
+    };
+
+    /* if (this.RoomOn === !this.platform.Characteristic.On) {
+      payload = {
+        currentPriority: {
+          priorityType: 'PickARoom',
+          selectedRooms: [0],
+        },
+      };
+    } else if (this.RoomOn === this.platform.Characteristic.On) {
+      payload = {
+        currentPriority: {
+          priorityType: 'PickARoom',
+          selectedRooms: [this.room],
+        },
+      };
+    }*/
     // set the room priority
     this.platform.log.debug(this.platform.rooms);
     payload.currentPriority.selectedRooms = this.platform.rooms;
-    this.platform.log.info(`Sending request to Honeywell API. room priority: ${this.findaccessories.accessoryAttribute.name}(${payload.currentPriority.selectedRooms})`);
+    this.platform.log.info(`Sending request to Honeywell API. Room Priority: ${this.findaccessories.accessoryAttribute.name}(${payload.currentPriority.selectedRooms})`);
     this.platform.log.warn(JSON.stringify(payload));
 
     // Make the API request
-    await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, payload, {
+    const put = (await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, payload, {
       params: {
         locationId: this.locationId,
       },
-    });
-
+    })).data;
+    this.platform.log.info(JSON.stringify(put));
     // Refresh the status from the API
     await this.refreshStatus();
   }
@@ -461,16 +477,7 @@ export class RoomSensorThermostat {
     }
   }
 
-  setRoomPriority(value: any, callback: (arg0: null) => void) {
-    this.platform.log.debug(`Set Room Priority: ${value}`);
-
-    this.platform.rooms = value;
-    this.doRoomUpdate.next();
-    callback(null);
-  }
-
   setTargetHeatingCoolingState(value: any, callback: (arg0: null) => void) {
-    this.setRoomPriority;
     this.platform.log.debug(`Set TargetHeatingCoolingState: ${value}`);
     this.TargetHeatingCoolingState = value;
 
@@ -481,6 +488,7 @@ export class RoomSensorThermostat {
       this.TargetTemperature = this.toCelsius(this.device.changeableValues.coolSetpoint);
     }
     this.service.updateCharacteristic(this.platform.Characteristic.TargetTemperature, this.TargetTemperature);
+    this.doRoomUpdate.next();
     this.doThermostatUpdate.next();
     callback(null);
   }
