@@ -376,7 +376,7 @@ export class RoomSensorThermostat {
       },
     };
 
-    this.platform.log.warn(`RoomOn:' ${this.rooms}`);
+    this.platform.log.debug(`RoomOn: ${this.rooms}`);
 
     /* if (this.RoomOn === !this.platform.Characteristic.On) {
       payload = {
@@ -394,7 +394,7 @@ export class RoomSensorThermostat {
       };
     }*/
     this.platform.log.info(`Sending request to Honeywell API. Room Priority: ${payload.currentPriority.selectedRooms}`);
-    this.platform.log.warn(JSON.stringify(payload));
+    this.platform.log.debug(JSON.stringify(payload));
 
     // Make the API request
     const put = (await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, payload, {
@@ -433,7 +433,7 @@ export class RoomSensorThermostat {
     }
 
     this.platform.log.info(`Sending request to Honeywell API. mode: ${payload.mode}, coolSetpoint: ${payload.coolSetpoint}, heatSetpoint: ${payload.heatSetpoint}`);
-    this.platform.log.warn(JSON.stringify(payload));
+    this.platform.log.debug(JSON.stringify(payload));
 
     // Make the API request
     await this.platform.axios.post(`${DeviceURL}/thermostats/${this.device.deviceID}`, payload, {
