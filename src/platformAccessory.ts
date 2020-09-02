@@ -100,7 +100,7 @@ export class RoomSensorThermostat {
     // you can create multiple services for each accessory
     this.service = this.accessory.getService(this.platform.Service.Thermostat) ||
       this.accessory.addService(this.platform.Service.Thermostat),
-      `${this.findaccessories.accessoryAttribute.name} Room Sensor Thermostat`;
+    `${this.findaccessories.accessoryAttribute.name} Room Sensor Thermostat`;
 
     // To avoid "Cannot add a Service with the same UUID another Service without also defining a unique 'subtype' property." error,
     // when creating multiple services of the same type, you need to use the following syntax to specify a name and subtype id:
@@ -382,12 +382,12 @@ export class RoomSensorThermostat {
     this.platform.log.debug(JSON.stringify(payload));
 
     // Make the API request
-    const put = (await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, payload, {
+    const pushRoomChanges = (await this.platform.axios.put(`${DeviceURL}/thermostats/${this.device.deviceID}/priority`, payload, {
       params: {
         locationId: this.locationId,
       },
     })).data;
-    this.platform.log.info(JSON.stringify(put));
+    pushRoomChanges;
     // Refresh the status from the API
     await this.refreshStatus();
   }
