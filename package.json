@@ -1,7 +1,7 @@
 {
   "displayName": "Homebridge Honeywell Home RoomSensor Thermostat",
   "name": "homebridge-honeywell-home-roomsensor-thermostat",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Add-on to the Honeywell Home https://honeywellhome.com plugin for Homebridge: https://github.com/homebridge/homebridge, that adds support for T9 Thermostat Room Sensors and displays them as Thermostats to give that room priority.",
   "author": "donavanbecker",
   "license": "Apache-2.0",
