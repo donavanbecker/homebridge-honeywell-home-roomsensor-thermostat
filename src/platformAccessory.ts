@@ -412,7 +412,6 @@ export class RoomSensorThermostat {
  * Pushes the requested changes to the Honeywell API
  */
   async pushChanges() {
-    this.doRoomUpdate.next();
     const payload = {
       mode: this.honeywellMode[this.TargetHeatingCoolingState],
       thermostatSetpointStatus: 'TemporaryHold',
