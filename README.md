@@ -10,7 +10,7 @@
 <p><a href="https://honeywellhome.com">Honeywell Home</a> plugin for 
   <a href="https://homebridge.io">Homebridge</a>. 
   
-  This Plugin allows you to control your T5, T6 and T9 Honeywell Home thermostats from HomeKit.
+  The Homebridge Honeywell Home Room Sensor Thermostat plugin allows you to access your T9 Honeywell Home thermostat room sensor as a thermostat from HomeKit. This will allow you to set that room as priority in your house.
 </p>
 
 </span>
