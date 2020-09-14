@@ -4,5 +4,5 @@ contact_links:
     url: https://discord.gg/8fpZA4S
     about: Please ask and answer questions here.
   - name: Homebridge-Honeywell-Home-Roomsensor-Thermostat - Pull Requests
-    url: https://github.com/homebridge-plugins/homebridge-honeywell-home-roomsensor-thermostat/pulls
+    url: https://github.com/donavanbecker/homebridge-honeywell-home-roomsensor-thermostat/pulls
     about: Please report security vulnerabilities here.
