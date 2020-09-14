@@ -52,7 +52,7 @@ Remove any sensitive information, such as your homebridge-honeywell-home consume
 * **Node.js Version**: <!-- node -v -->
 * **NPM Version**: <!-- npm -v -->
 * **Homebridge Version**: <!-- homebridge -V -->
-* **Homebridge Honeywell Home Room Sensor Thermostat Version**:
+* **Homebridge Honeywell Home Room Sensor Thermostat Plugin Version**:
 * **Homebridge Config UI X Plugin Version**:
 * **Operating System**: <!-- Raspbian / Ubuntu / Debian / Windows / macOS / Docker -->
 
