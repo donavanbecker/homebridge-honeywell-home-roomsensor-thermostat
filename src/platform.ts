@@ -370,7 +370,7 @@ export class RoomSensorThermostatPlatform implements DynamicPlatformPlugin {
               }
             } else {
               this.log.info(
-                'A Device was found that isn\'t supported, Please open Feature Request Here: https://git.io/JUWN2, If you would like to see support.',
+                'A Device was found that is not supported, Please open Feature Request Here: https://git.io/JUWN2, If you would like to see support.',
               );
             }
           }
