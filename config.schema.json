@@ -47,34 +47,36 @@
             "minimum": 600,
             "description": "Indicates the number of seconds between polls of the Honeywell Home service."
           },
-          "roomsensor": {
-            "title": "Room Sensor",
+          "thermostat": {
+            "title": "Thermostat",
             "type": "object",
             "properties": {
-              "hide_battery": {
-                "title": "Hide Battery Service",
-                "type": "boolean",
-                "requried": false
-              },
-              "hide_temperature": {
-                "title": "Hide Temperature Service",
-                "type": "boolean",
-                "requried": false
-              },
-              "hide_humidity": {
-                "title": "Hide Humidity Service",
-                "type": "boolean",
-                "requried": false
-              },
-              "hide_occupancy": {
-                "title": "Hide Occupancy Service",
-                "type": "boolean",
-                "requried": false
-              },
-              "hide_motion": {
-                "title": "Hide Motion Service",
-                "type": "boolean",
-                "requried": false
+              "thermostatSetpointStatus": {
+                "title": "Thermostat Setpoint Status",
+                "type": "string",
+                "description": "For \"LCC-\" devices only. \"PermanentHold\" will hold the setpoint until user requests another change. \"NoHold\" will return to schedule. \"TemporaryHold\" will hold the set temperature until \"nextPeriodTime\".",
+                "required": true,
+                "default": "TemporaryHold", 
+                "oneOf": [
+                  {
+                    "title": "No Hold",
+                    "enum": [
+                      "NoHold"
+                    ]
+                  },
+                  {
+                    "title": "Permanent Hold",
+                    "enum": [
+                      "PermanentHold"
+                    ]
+                  },
+                  {
+                    "title": "Temporary Hold",
+                    "enum": [
+                      "TemporaryHold"
+                    ]
+                  }
+                ]
               }
             }
           }
@@ -85,26 +87,27 @@
   "layout": [
     {
       "type": "fieldset",
-      "title": "Advanced Settings",
+      "title": "Honeywell Home Account Info",
       "expandable": true,
       "expanded": false,
       "items": [
         {
-          "type": "fieldset",
-          "title": "Manual Setup",
-          "expandable": true,
-          "expanded": false,
-          "items": [
-            {
-              "type": "help",
-              "helpvalue": "<h5></h5><em class='primary-text'>This is for Manual Setup Only.</em>"
-            },
-            "name",
-            "credentials.consumerKey",
-            "credentials.consumerSecret",
-            "credentials.refreshToken"
-          ]
+          "type": "help",
+          "helpvalue": "<h5></h5><em class='primary-text'>This is for Manual Setup Only.</em>"
         },
+        "name",
+        "credentials.consumerKey",
+        "credentials.consumerSecret",
+        "credentials.refreshToken"
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Advanced Settings",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        
         {
           "type": "help",
           "helpvalue": "<h5>TTL</h5><em class='primary-text'>TTL indicates the number of seconds between polls of the Honeywell Home service.</em>"
@@ -115,19 +118,11 @@
         },
         {
           "type": "fieldset",
-          "title": "Room Sensor Options",
+          "title": "Thermostat Options",
           "expandable": true,
           "expanded": false,
           "items": [
-            {
-              "type": "help",
-              "helpvalue": "<h5>Hide Room Sensor Services</h5><em class='primary-text'>Allows you to hide your Room Sensor's tempeture sensor, occupancy sensor, motion sensor, or humidity sensor.</em>"
-            },
-            "options.roomsensor.hide_battery",
-            "options.roomsensor.hide_temperature",
-            "options.roomsensor.hide_occupancy",
-            "options.roomsensor.hide_motion",
-            "options.roomsensor.hide_humidity"
+            "options.thermostat.thermostatSetpointStatus"
           ]
         }
       ]
