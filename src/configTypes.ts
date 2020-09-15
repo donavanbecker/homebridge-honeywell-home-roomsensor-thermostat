@@ -25,9 +25,16 @@ export type T9Thermostat = {
   minCoolSetpoint: number;
   maxCoolSetpoint: number;
   changeableValues: T9changeableValues;
+  operationStatus: OperationStatusT9;
   indoorHumidity: number;
   deviceModel: string;
 };
+
+export type OperationStatusT9 = {
+  mode: string;
+  fanRequest: boolean;
+  circulationFanRequest: boolean;
+}
 
 export type T9groups = {
   id: number;
@@ -77,6 +84,7 @@ export type T5Device = {
   minCoolSetpoint: number;
   maxCoolSetpoint: number;
   changeableValues: T5ChangeableValues;
+  operationStatus: OperationStatusT5;
   deviceModel: string;
 };
 
@@ -88,6 +96,12 @@ export type T5ChangeableValues = {
   thermostatSetpointStatus: string;
   heatCoolMode: string;
 };
+
+export type OperationStatusT5 = {
+  mode: string;
+  fanRequest: boolean;
+  circulationFanRequest: boolean;
+}
 
 // TCC (Unknown) Thermostat
 export type TCCDevice = {
@@ -115,12 +129,12 @@ export type TCCDevice = {
   minCoolSetpoint: number;
   maxCoolSetpoint: number;
   changeableValues: TCC_ChangeableValues;
-  operationStatus: OperationStatus;
+  operationStatus: OperationStatusTCC;
   indoorHumidity: number;
   deviceModel: string;
 };
 
-export type OperationStatus = {
+export type OperationStatusTCC = {
   mode: string;
 };
 
@@ -160,7 +174,7 @@ export type RoundDevice = {
   minCoolSetpoint: number;
   maxCoolSetpoint: number;
   changeableValues: RoundChangeableValues;
-  operationStatus: OperationStatus;
+  operationStatus: OperationStatusTCC;
   indoorHumidity: number;
   deviceModel: string;
 };
