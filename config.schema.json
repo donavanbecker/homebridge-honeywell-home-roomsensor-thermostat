@@ -82,7 +82,8 @@
               "thermostat": {
                 "title": "Thermostat Room Priority",
                 "type": "boolean",
-                "requried": false
+                "requried": true,
+                "default": true
               },
               "priorityType": {
                 "title": "Priority Type",
