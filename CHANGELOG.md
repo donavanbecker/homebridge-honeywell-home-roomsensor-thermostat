@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changes
 
+- Fix for Cannot set property 'ttl' of undefined.
 - Updated other dependencies.
 
 ## [Version 2.0.0](https://github.com/donavanbecker/homebridge-honeywell-home/compare/v1.0.0...v2.0.0) (2020-09-17)
